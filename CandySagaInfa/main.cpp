@@ -24,8 +24,8 @@ struct _elementsCoordinates{            //Struktura z informacjami o elementach
 
 // Konfiguracja
 
-int N=10;                               // N wielkość planszy
-int Elements=4;                         // Elements ilość różnych elementów
+int N=9;                               // N wielkość planszy
+int Elements=3;                         // Elements ilość różnych elementów
 
 // Kordynaty
 
@@ -35,6 +35,8 @@ int x1=0;
 // Wynik
 
 int score=0;
+
+bool movee;
 
 void randomElements()                   // Generowanie typu elementu do struktury 
 {
@@ -80,7 +82,7 @@ void boardDraw()                        // Rysowanie planszy
     system("CLS");
     SetConsoleTextAttribute(hOut,7);
 
-    cout<<endl<<endl<<endl;
+    cout<<endl<<endl;
 
     cout<<"                         "<<char(218);                    // Górne oobramowanie
     for (int i=0; i<N; i++)
@@ -108,12 +110,35 @@ void boardDraw()                        // Rysowanie planszy
                 case 3:
                     SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_RED );  //Kolor dla 4 elementu
                     break;
+                case 4:
+                    SetConsoleTextAttribute( hOut, FOREGROUND_RED | FOREGROUND_BLUE );
+                    break;
                 default:
                     break;
             }
 
-             if (l==x1 && k==y1)
-                SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY );                // Kolor dla elementu gracza
+            if (l==x1 && k==y1) 
+                switch (_ElementsCoordinates[count].type)
+                {
+                    case 0:           
+                        SetConsoleTextAttribute( hOut, BACKGROUND_GREEN); 
+                        break;
+                    case 1:
+                        SetConsoleTextAttribute( hOut, BACKGROUND_RED);
+                        break;
+                    case 2:
+                        SetConsoleTextAttribute( hOut, BACKGROUND_BLUE); 
+                        break;
+                    case 3:
+                        SetConsoleTextAttribute( hOut, BACKGROUND_GREEN | BACKGROUND_RED );
+                        break;
+                    case 4:
+                        SetConsoleTextAttribute( hOut, BACKGROUND_RED | BACKGROUND_BLUE );
+                        break;
+                    default:
+                        break;
+            }
+
             if (_ElementsCoordinates[count++].type!=10)
                 cout<<char(158);
             else
@@ -147,7 +172,7 @@ void gravity()                  // Grawitacja dla elementów
                     _ElementsCoordinates[i+j*N-N].type=10;
                     if (_ElementsCoordinates[i+j*N].type!=_ElementsCoordinates[i+j*N-N].type)
                     {
-                    Sleep(100);                                             // Animacja
+                    Sleep(75);                                             // AnimacjaXD
                     boardDraw(); 
                     }
                 }
@@ -159,14 +184,15 @@ void gravity()                  // Grawitacja dla elementów
             if (_ElementsCoordinates[i].type==10)
             {
                 _ElementsCoordinates[i].type=rand()%Elements;               // Generuje nowe elementy na górze mapy
-                Sleep(100);
+                Sleep(75);
                 boardDraw();   
             }
     
 }
 void check()            // Sprawdzenie czy są 3 takie same elementy obok siebie
 {
-    int boolean=true;
+    bool boolean=true;
+    movee=false;
     while(boolean)
     {  
         boolean=false;
@@ -178,7 +204,13 @@ void check()            // Sprawdzenie czy są 3 takie same elementy obok siebie
                 if (j>=2)       // Sprawdza poziomo                                                  
                     if(_ElementsCoordinates[count].type==_ElementsCoordinates[count-1].type && _ElementsCoordinates[count-1].type==_ElementsCoordinates[count-2].type)      
                     {   
-                        boolean=true;            
+                        movee=true;
+                        boolean=true; 
+                        for (int po=1; po<N-j; po++)
+                            if (_ElementsCoordinates[count+po].type==_ElementsCoordinates[count].type)
+                                _ElementsCoordinates[count+po].type=10;
+                            else 
+                                break;           
                         _ElementsCoordinates[count].type=10;
                         _ElementsCoordinates[count-1].type=10;
                         _ElementsCoordinates[count-2].type=10;
@@ -187,7 +219,13 @@ void check()            // Sprawdzenie czy są 3 takie same elementy obok siebie
                 if (i>=2)      // Sprawdza pionowo                        
                     if(_ElementsCoordinates[count].type==_ElementsCoordinates[count-N].type && _ElementsCoordinates[count-N].type==_ElementsCoordinates[count-2*N].type) 
                     {
+                        movee=true;
                         boolean=true;
+                        for (int po=1; po<N-i; po++)
+                            if (_ElementsCoordinates[count+N*po].type==_ElementsCoordinates[count].type)
+                                _ElementsCoordinates[count+N*po].type=10;
+                            else 
+                                break;
                         _ElementsCoordinates[count].type=10;
                         _ElementsCoordinates[count-N].type=10;
                         _ElementsCoordinates[count-2*N].type=10;
@@ -200,6 +238,9 @@ void check()            // Sprawdzenie czy są 3 takie same elementy obok siebie
 }
 void exchange()                         // Zamiana elementów
 {
+    boardDraw();
+    cout<<"                              ^  "<<endl;
+    cout<<"                            < v >"<<endl;
     int change;
     int click=getch();
     if (click == 0|| click ==224) click = getch();
@@ -211,6 +252,13 @@ void exchange()                         // Zamiana elementów
                     change = _ElementsCoordinates[x1+y1*N].type;             // Dół  
                     _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1+N+y1*N].type;
                     _ElementsCoordinates[x1+N+y1*N].type=change;
+                    check();
+                    if (!movee)
+                    {
+                        change = _ElementsCoordinates[x1+y1*N].type;             // Dół  
+                        _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1+N+y1*N].type;
+                        _ElementsCoordinates[x1+N+y1*N].type=change;
+                    }
                 }
                 break;
             
@@ -220,6 +268,13 @@ void exchange()                         // Zamiana elementów
                     change = _ElementsCoordinates[x1+y1*N].type;             // Góra 
                     _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1-N+y1*N].type;
                     _ElementsCoordinates[x1-N+y1*N].type=change;
+                    check();
+                    if (!movee)
+                    {
+                        change = _ElementsCoordinates[x1+y1*N].type;             // Góra 
+                        _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1-N+y1*N].type;
+                        _ElementsCoordinates[x1-N+y1*N].type=change;
+                    }
                 }
                 break;  
             case 75: 
@@ -228,6 +283,13 @@ void exchange()                         // Zamiana elementów
                     change = _ElementsCoordinates[x1+y1*N].type;              // Lewo
                     _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1-1+y1*N].type;
                     _ElementsCoordinates[x1-1+y1*N].type=change;
+                    check();
+                    if (!movee)
+                    {
+                        change = _ElementsCoordinates[x1+y1*N].type;              // Lewo
+                        _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1-1+y1*N].type;
+                        _ElementsCoordinates[x1-1+y1*N].type=change;
+                    }
                 }
                 break;
             case 77:   
@@ -236,10 +298,17 @@ void exchange()                         // Zamiana elementów
                     change = _ElementsCoordinates[x1+y1*N].type;              // Prawo        
                     _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1+1+y1*N].type;
                     _ElementsCoordinates[x1+1+y1*N].type=change;
+                    check();
+                    if (!movee)
+                    {
+                        change = _ElementsCoordinates[x1+y1*N].type;              // Prawo        
+                        _ElementsCoordinates[x1+y1*N].type=_ElementsCoordinates[x1+1+y1*N].type;
+                        _ElementsCoordinates[x1+1+y1*N].type=change;
+                    }
                 }
                 break;
         }
-    check();
+    
 }
 void control()                          // Sterowanie
 {   
