@@ -87,31 +87,7 @@ void drukuj2(_save t[], int licz_el)
                 cout<<t[i].element<<endl;
         }
 }
-/*
 
-void drukuj3(_opcje t[], int licz_el)
-{
-    _Opcje[0].wartosc = "Wielkosc pola";
-    _Opcje[0].ilosc = N;
-    _Opcje[1].wartosc = "Poziom trudnosci";
-    _Opcje[1].ilosc = poziom;
-    _Opcje[2].wartosc = "Ilosc zyc";
-    _Opcje[2].ilosc = zycia;
-
-    system("CLS");
-    cout<<"Wybierz jedna z dostepnych opcji by ja zmienic"<<endl<<endl;
-    for (int i=0; i<licz_el; i++)
-    {
-            if(i==poz)
-                cout<<"*";
-            else
-                cout<<" ";
-            cout<<t[i].wartosc<<" : "<<t[i].ilosc<<endl;
-    }
-
-}
-
-*/
 void czysc()
 {
     for (int i=0; i<N*N; i++)
@@ -131,74 +107,6 @@ void czysc()
         bomby=N*N*poziom/10;
         zycia=4;
 }
-
-/*
-void opcje()
-{
-    bool warunek;
-    bool warunek2;
-    do{
-        warunek=true;
-        warunek2=true;
-        poz=0;
-        drukuj3(_Opcje, 3);
-        char klik;
-
-        do{
-
-        klik=getch();
-        switch (klik)
-        {
-            case 72:
-                poz--;
-                break;
-            case 80:
-                poz++;
-                break;
-        }
-        if(poz<0)
-            poz+=3;
-        else poz%=3;
-            drukuj3(_Opcje, 3);
-        if(klik==13)
-        {
-            cout<<"Wcisnieto: "<<_Opcje[poz].wartosc<<endl;
-            Sleep(1000);
-            warunek = false;
-        }
-        else if(klik==27)
-        {
-            warunek = false;
-            warunek2= false;
-        }
-
-        } while(warunek);
-
-        if (warunek2)
-        {
-            system("CLS");
-            int pomoc;
-            cout<<"Podaj nowa wartosc
-            yp--; dla "<<_Opcje[poz].wartosc<<" ";
-            cin>>pomoc;
-            if (poz==0)
-                N=pomoc;
-            else if(poz==1)
-            {
-                poziom=pomoc;
-                bomby=N*N*poziom/10;
-            }
-            else if(poz==2)
-                zycia=pomoc;
-
-            cout<<"Wczytano";
-            opcjeb=true;
-            Sleep(1000);
-        }
-    } while(warunek2);
-
-}
-*/
 
 void koniec()
 {
@@ -327,51 +235,6 @@ void przeciwnik()
 
 
 }
-/*
-void sortuj_bomby()
-{
-    bool warunek;
-
-    do
-    {
-       warunek=false;
-        for (int i=0; i<bomby; i++)
-        {
-            if ((_listap[i].y > _listap[i+1].y) || ((_listap[i].y == _listap[i+1].y) && (_listap[i].x  > _listap[i+1].x)))
-            {
-                swap(_listap[i].x,_listap[i+1].x);
-                swap(_listap[i].y,_listap[i+1].y);
-                warunek=true;
-            }
-        }
-    } while(warunek);
-
-}
-
-void rysuj_sciezke()
-{
-    int k=0;
-    int f=0;
-    for (int i=0; i<N; i++)
-    {
-        for (int j=0; j<N; j++)
-            if (_listap[k].x==j && _listap[k].y==i)
-            {
-                k++;
-                cout<<"B";
-            }
-            else if (_Wspolrzedne[f].y==j  && _Wspolrzedne[f].x==i)
-            {
-                f++;
-                cout<<"#";
-            }
-            else
-                cout<<"*";
-        cout<<endl;
-    }
-
-}
-*/
 
 void rysuj_plansze()
 {
