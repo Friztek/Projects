@@ -7,8 +7,8 @@ using namespace std;
 
 void MaximizeOutputWindow(void)
 {
-    HWND consoleWindow = GetConsoleWindow(); // This gets the value Windows uses to identify your output window
-    ShowWindow(consoleWindow, SW_MAXIMIZE); // this mimics clicking on its' maximize button
+    HWND consoleWindow = GetConsoleWindow(); 
+    ShowWindow(consoleWindow, SW_MAXIMIZE); 
 }
  
 void RestoreOutputWindow(void)
