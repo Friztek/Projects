@@ -590,7 +590,6 @@ int main()
         return 0;
 }
 
-//wesolych swiat :)
 
 
 
